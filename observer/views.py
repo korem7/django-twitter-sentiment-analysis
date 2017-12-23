@@ -27,7 +27,7 @@ class TwitterClient(object):
             self.auth.set_access_token(access_token, access_token_secret)
 
             self.api = tweepy.API(self.auth)
-            
+
         except requests.ConnectionError as err:
             err = 'Error: Authentication Failed'
             raise Http404(err)
@@ -79,27 +79,28 @@ class TwitterClient(object):
 def home(request):
     postive_tweets = []
     negative_tweets = []
+    tweet_count = 250
     try:
         if request.method == 'POST':
             search_id = request.POST['searchcompany']
             api = TwitterClient()
 
-            tweets = api.get_tweets(query=search_id, count=250)
+            tweets = api.get_tweets(query=search_id, count=tweet_count)
 
             ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
-
-            result_positive = format(100*len(ptweets)/len(tweets))
                     
-            ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
-                    
-            result_negative = format(100 * len(ntweets) / len(tweets))
+            ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']           
 
-            result_neutral = format(100 * (len(tweets) - (len(ntweets) + len(ptweets))) / len(tweets))
+            result_positive = round(100 * len(ptweets)/len(tweets))
+                    
+            result_negative = round(100 * len(ntweets) / len(tweets))
+
+            result_neutral = round(100 * (len(tweets) - (len(ntweets) + len(ptweets))) / len(tweets))
 
             return render(
                     request,
                     'home.html',
-                    context = {'result_positive':result_positive,'result_negative':result_negative,'result_neutral':result_neutral},
+                    context = {'tweet_count':tweet_count, 'result_positive':result_positive,'result_negative':result_negative,'result_neutral':result_neutral},
                 )
         else:
             return render(request, 'home.html')
