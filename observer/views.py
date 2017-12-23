@@ -9,6 +9,7 @@ import re
 import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
+from django.http import Http404
 
 class TwitterClient(object):
 
@@ -26,8 +27,10 @@ class TwitterClient(object):
             self.auth.set_access_token(access_token, access_token_secret)
 
             self.api = tweepy.API(self.auth)
-        except:
-            print("Error: Authentication Failed")
+            
+        except requests.ConnectionError as err:
+            err = 'Error: Authentication Failed'
+            raise Http404(err)
 
     def clean_tweet(self, tweet):
 
@@ -69,9 +72,8 @@ class TwitterClient(object):
 
             return tweets
 
-        except tweepy.TweepError as e:
-
-            print("Error : " + str(e))
+        except tweepy.TweepError as err:
+            raise Http404(err)
 
 
 def home(request):
@@ -82,7 +84,7 @@ def home(request):
             search_id = request.POST['searchcompany']
             api = TwitterClient()
 
-            tweets = api.get_tweets(query=search_id, count=1000)
+            tweets = api.get_tweets(query=search_id, count=250)
 
             ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
 
@@ -101,5 +103,8 @@ def home(request):
                 )
         else:
             return render(request, 'home.html')
+
     except requests.ConnectionError as err:
-        print(err)
+        raise Http404(err)
+
+
