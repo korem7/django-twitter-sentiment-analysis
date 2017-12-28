@@ -80,6 +80,8 @@ def home(request):
     postive_tweets = []
     negative_tweets = []
     tweet_count = 250
+    retrieve_count = 0
+    compnay_name = ""
     try:
         if request.method == 'POST':
             search_id = request.POST['searchcompany']
@@ -91,16 +93,22 @@ def home(request):
                     
             ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']           
 
-            result_positive = round(100 * len(ptweets)/len(tweets))
+            result_positive = round((100 * len(ptweets)/len(tweets)),1)
                     
-            result_negative = round(100 * len(ntweets) / len(tweets))
+            result_negative = round((100 * len(ntweets) / len(tweets)),1)
 
-            result_neutral = round(100 * (len(tweets) - (len(ntweets) + len(ptweets))) / len(tweets))
+            result_neutral = round((100 * (len(tweets) - (len(ntweets) + len(ptweets))) / len(tweets)),1)
+
+            compnay_name  = "Sentiment analysis about \"" + search_id  + "\""
+
+            for i in tweets:
+                retrieve_count = retrieve_count +1
+
 
             return render(
                     request,
                     'home.html',
-                    context = {'tweet_count':tweet_count, 'result_positive':result_positive,'result_negative':result_negative,'result_neutral':result_neutral},
+                    context = {'tweet_count':tweet_count, 'result_positive':result_positive,'result_negative':result_negative,'result_neutral':result_neutral, 'compnay_name': compnay_name, 'retrieve_count':retrieve_count},
                 )
         else:
             return render(request, 'home.html')

@@ -68,8 +68,8 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <div class="container">
-          <h2 class="display-3">Sentiment Analysis of Companies</h2>
-          <p>You can view sentiments about top tech companies over analyzed data of tweets</p>
+          <h2 class="display-3">Sentiment Analysis</h2>
+          <p>You can view sentiments about the company you searched for via analyzed data of tweets</p>
           <!--p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p-->
         </div>
       </div>
@@ -78,15 +78,16 @@
         <!-- Example row of columns -->
         <div class="row">
           <div class="col-md-4">
-            <h2>{{ searchcompany }}</h2>
+            <p><i>{{ compnay_name }}</i></p>
             <!--mg src="https://www.socialsamosa.com/wp-content/uploads/2014/05/sentiment-analysis.png"-->
             <!--p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p-->
             <!--p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p-->
 	            <ul>
-            <li><strong>Total Count of Tweets:</strong> {{ tweet_count }}</li>
-				    <li><strong>Positive:</strong> {{ result_positive }}</li>
-				    <li><strong>Negative:</strong> {{ result_negative }}</li>
-				    <li><strong>Neutral:</strong> {{ result_neutral }}</li>
+            <li><strong>Requested Tweet Count:</strong> {{ tweet_count }}</li>
+            <li><strong>Retrieved Tweet Count:</strong> {{ retrieve_count }}</li>
+				    <li><strong>Positive:</strong> {{ result_positive }} %</li>
+				    <li><strong>Negative:</strong> {{ result_negative }} %</li>
+				    <li><strong>Neutral:</strong> {{ result_neutral }} %</li>
 			    </ul>
           </div>
           <div class="col-md-4" id="piechart">
